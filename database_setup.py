@@ -1,4 +1,4 @@
-from walrus import Database
+from redis import StrictRedis
 import yaml
 
 # Connecting Redis Database
@@ -8,6 +8,6 @@ class DatabaseSetup:
   with open('config/database.yaml', 'r') as f:
     config = yaml.load(f)
 
-  db = Database(host = config['redisdb']['host'], \
+  db = StrictRedis(host = config['redisdb']['host'], \
                 port = config['redisdb']['port'], \
                 db = config['redisdb']['db'])

@@ -3,8 +3,8 @@ from pyspark.sql import Window, Row
 from pyspark.sql.functions import col, count
 from pyspark.sql.functions import rank, row_number
 from pyspark.sql.functions import unix_timestamp
-from walrus import *
 
+import redis
 import pandas as pd
 import app_constants
 import spark_setup
@@ -38,47 +38,42 @@ if __name__=="__main__":
                         .orderBy(clean_df.dateAdded.desc(),
                                 clean_df.dateUpdated.desc())
 
-    recent_df = clean_df.withColumn('date_added',
-                              unix_timestamp(clean_df.dateAdded.cast('date'))) \
+    recent_df = clean_df.withColumn('date_timestamp',
+                          unix_timestamp(clean_df.dateAdded.cast('date'))) \
+                        .withColumn("date_added", unix_timestamp(clean_df.dateAdded)) \
+                        .withColumn("date_updated", unix_timestamp(clean_df.dateUpdated)) \
                         .withColumn('row_number', row_number().over(date_window)) \
                         .filter(col('row_number') == app_constants.Count.RECENT_DATA) \
-                        .drop('row_number')
+                        .drop('row_number', 'dateAdded', 'dateUpdated') \
+                        .withColumnRenamed('date_added', 'dateAdded') \
+                        .withColumnRenamed('date_updated', 'dateUpdated')
 
     recent_dict = recent_df.toPandas().to_dict('records')
 
     for data in recent_dict:
-        recent_key = app_constants.KeyMeta.RECENT + app_constants.KeyMeta.JOINER + str(data['date_added'])
-
-        if db.exists(recent_key):
-            recent_hash = db.get_key(recent_key)
-        else:
-            recent_hash = db.Hash(recent_key)
-
-        recent_hash.update(data)
+      # Create key with recent namespace & epoch date
+      recent_key = app_constants.KeyMeta.RECENT + app_constants.KeyMeta.JOINER + str(data['date_timestamp'])
+      # Assigning entire hash to the key
+      db.hmset(recent_key, data)
 
   # API II - /getBrandsCount
   def count_stats():
-    count_df = clean_df.withColumn('date_added', \
+    count_df = clean_df.withColumn('date_timestamp', \
                             unix_timestamp(clean_df.dateAdded.cast('date'))) \
-                      .groupBy('date_added', 'brand') \
+                      .groupBy('date_timestamp', 'brand') \
                       .agg(count('brand')) \
-                      .orderBy('date_added', 'count(brand)', ascending=False)
+                      .orderBy('date_timestamp', 'count(brand)', ascending=False)
 
     count_dict = count_df.toPandas() \
-                      .groupby('date_added') \
+                      .groupby('date_timestamp') \
                       .apply(lambda x: dict(zip(x['brand'], x['count(brand)']))) \
                       .to_dict()
 
     for epoch_date, data in count_dict.iteritems():
-        count_key = app_constants.KeyMeta.COUNT + app_constants.KeyMeta.JOINER + str(epoch_date)
-
-        print count_key
-        if db.exists(count_key):
-            count_hash = db.get_key(count_key)
-        else:
-            count_hash = db.Hash(count_key)
-
-        count_hash.update(data)
+      # Create key with count namespace & epoch date
+      count_key = app_constants.KeyMeta.COUNT + app_constants.KeyMeta.JOINER + str(epoch_date)
+      # Assigning entire hash to the redis key
+      db.hmset(count_key, data)
 
   # API III - /getItemsbyColor
   def color_stats():
