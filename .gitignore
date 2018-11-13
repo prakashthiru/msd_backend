@@ -9,6 +9,7 @@
 
 # Ignore temproary folders
 /spark-warehouse
+/tmp
 /.ipynb_checkpoints
 /data/.~*
 
