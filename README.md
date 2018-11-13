@@ -26,5 +26,5 @@ cp config.yaml.sample config.yaml
 
 ## Run
 ```
-/bin/spark-submit main.py
+/bin/spark-submit analytics.py
 ```
