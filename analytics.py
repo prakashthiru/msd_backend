@@ -1,6 +1,8 @@
 # coding: utf-8
-from pyspark.sql import Window
-from pyspark.sql.functions import col, count, rank, row_number, unix_timestamp
+from pyspark.sql import Window, Row
+from pyspark.sql.functions import col, count
+from pyspark.sql.functions import rank, row_number
+from pyspark.sql.functions import unix_timestamp
 from walrus import *
 
 import pandas as pd
@@ -19,14 +21,11 @@ if __name__=="__main__":
                     .option("inferSchema", "true") \
                     .option("header", spark_setup.SparkSetup.data_headers) \
                     .csv(spark_setup.SparkSetup.data_path)
-  # Data clean up
 
-  # # REMOVE DUPLICATE RECORDS AND IF A COLUMN HAS NULL VALUE
-  # clean_df = session_df.dropna() \
-  #                     .dropDuplicates() \
-  #                     .select(app_constants.Columns.REQUIRED)
-  min_df = session_df.select(app_constants.Columns.REQUIRED)
-  clean_df = min_df.dropna()
+  # Data clean up: REMOVE duplicate records and if required column has NULL value
+  clean_df = session_df.drop_duplicates() \
+                    .dropna(subset=app_constants.Columns.REQUIRED) \
+                    .select(app_constants.Columns.REQUIRED)
 
   def generate_stats():
     count_stats()
@@ -73,6 +72,7 @@ if __name__=="__main__":
     for epoch_date, data in count_dict.iteritems():
         count_key = app_constants.KeyMeta.COUNT + app_constants.KeyMeta.JOINER + str(epoch_date)
 
+        print count_key
         if db.exists(count_key):
             count_hash = db.get_key(count_key)
         else:
