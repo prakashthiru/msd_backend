@@ -1,5 +1,4 @@
-appname: 'analytics'
-
+# Redis Database Configuration
 redisdb:
   host: 'localhost'
   port: '6379'

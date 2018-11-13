@@ -1,0 +1,4 @@
+# Application Configuration
+appname: 'analytics'
+data_path: 'data/test.csv'
+data_headers: true

@@ -23,3 +23,8 @@ pip install -r requirements.txt
 ```
 cp config.yaml.sample config.yaml
 ```
+
+## Run
+```
+/bin/spark-submit main.py
+```
