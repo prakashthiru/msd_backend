@@ -5,12 +5,14 @@
 #   git config --global core.excludesfile '~/.gitignore_global'
 
 # Ignore sample config
-/config.yaml
+/config/database.yaml
+/config/spark.yaml
 
 # Ignore temproary folders
 /spark-warehouse
-/tmp
 /.ipynb_checkpoints
+/tmp
+/*.pyc
 /data/.~*
 
 # Ignore temproarily
