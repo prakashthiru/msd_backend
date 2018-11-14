@@ -1,3 +1,4 @@
+pyspark == 2.4.0
 pandas == 0.23.4
-redis == 2.6.9
+redis == 2.103
 PyYAML == 3.11
