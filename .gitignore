@@ -8,12 +8,13 @@
 /config/database.yaml
 /config/spark.yaml
 
-# Ignore temproary folders
+# Ignore temproary files & folders
 /spark-warehouse
 /.ipynb_checkpoints
 /tmp
 /*.pyc
 /data/.~*
+/dump.rdb
 
 # Ignore temproarily
 /data/dump.csv
