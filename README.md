@@ -19,6 +19,11 @@ git clone https://github.com/prakashthiru/msd_spark.git
 pip install -r requirements.txt
 ```
 
+## UNZIP the Data dump
+```
+unzip data/dump.zip -d data
+```
+
 ## Copy sample file and edit file as appropriate
 ```
 cp config/database.yaml.sample config/database.yaml
