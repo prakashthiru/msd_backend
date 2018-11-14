@@ -3,7 +3,7 @@ import yaml
 
 class SparkSetup:
 
-  with open('config/spark.yaml', 'r') as f:
+  with open('config/app.yaml', 'r') as f:
     config = yaml.load(f)
 
   # To execute operations in cluster
