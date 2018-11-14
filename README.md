@@ -26,8 +26,8 @@ unzip data/dump.zip -d data
 
 ## Copy sample file and edit file as appropriate
 ```
-cp config/database.yaml.sample config/database.yaml
 cp config/app.yaml.sample config/app.yaml
+cp config/database.yaml.sample config/database.yaml
 ```
 
 ## Run
