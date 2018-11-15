@@ -78,7 +78,7 @@ def count_stats():
                     .to_dict()
 
   # Inspect dictionary data and store them in proper namespace
-  for epoch_date, data in count_dict.iteritems():
+  for epoch_date, data in count_dict.items():
     # Create key with count namespace & epoch date
     count_key = app_constants.KeyMeta.COUNT + app_constants.KeyMeta.JOINER + str(epoch_date)
     # Assigning entire hash to the redis key
@@ -107,13 +107,13 @@ def color_stats():
                     .apply(lambda x: x.to_dict('records'))
 
   # Drop the list value if the key already holds a value
-  for k, v in color_dict.iteritems():
+  for k, v in color_dict.items():
     for color in k.split(','):
       key = (app_constants.KeyMeta.COLOR + app_constants.KeyMeta.JOINER + color).lower()
       if db.exists(key): db.delete(key)
 
   # Inspect the color values and push them to the key's list. Should do Push instead of assigining new data every time. Colors might repeat if they are in with multi colors
-  for color, data in color_dict.iteritems():
+  for color, data in color_dict.items():
     split_colors = color.split(',')
 
     for split_color in split_colors:

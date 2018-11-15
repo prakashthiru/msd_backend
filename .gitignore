@@ -4,17 +4,16 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile '~/.gitignore_global'
 
-# Ignore sample config
-/config/app.yaml
-/config/database.yaml
+## Ignore sample config
+# /config/app.yaml
+# /config/database.yaml
 
 # Ignore temproary files & folders
 /spark-warehouse
 /.ipynb_checkpoints
 /tmp
-/*.pyc
-/data/.~*
-/dump.rdb
 
-# Ignore temproarily
+/*.pyc
+/dump.rdb
+/data/.~*
 /data/dump.csv
