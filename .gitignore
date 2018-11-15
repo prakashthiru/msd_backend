@@ -5,8 +5,8 @@
 #   git config --global core.excludesfile '~/.gitignore_global'
 
 # Ignore sample config
-/config/app.yaml
-/config/database.yaml
+# /config/app.yaml
+# /config/database.yaml
 
 # Ignore temproary files & folders
 /spark-warehouse
