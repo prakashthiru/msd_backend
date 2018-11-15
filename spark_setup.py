@@ -1,9 +1,10 @@
 from pyspark.sql import SparkSession
 import yaml
+import os
 
 class SparkSetup:
 
-  with open('config/app.yaml', 'r') as f:
+  with open(os.path.join(os.path.dirname(__file__), 'config/app.yaml')) as f:
     config = yaml.load(f)
 
   # To execute operations in cluster

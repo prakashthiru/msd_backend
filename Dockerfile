@@ -1,22 +1,16 @@
-# Use an official Python runtime as a parent image
-FROM python:2.7-slim
+# Use an Spark runtime as a parent image
+FROM gettyimages/spark
 
 # Set the working directory to /app
 WORKDIR /app
 
 # Copy the current directory contents into the container at /app
 COPY . /app
-COPY /app/config/database.yaml.sample /app/config/database.sample
-COPY /app/config/spark.yaml.sample /app/config/spark.sample
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
-# Make port 80 available to the world outside this container
-EXPOSE 80
+RUN unzip data/dump.zip -d data
 
-# Define environment variable
-# ENV NAME World
-
-# Run app.py when the container launches
-CMD ["python", "analytics.py"]
+# Run analytics.py when the container launches
+CMD ["spark-submit", "analytics.py"]
